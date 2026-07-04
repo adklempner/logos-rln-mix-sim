@@ -23,7 +23,7 @@ Requires Docker (~30 GB free in its VM), `git`, and internet. No local toolchain
 manual keystores — the bootstrap fetches and builds everything.
 
 ```sh
-git clone git@github.com:adklempner/logos-rln-mix-sim.git
+git clone git@github.com:logos-co/logos-rln-mix-sim.git
 cd logos-rln-mix-sim
 bash docker/testnet/mix_e2e/bootstrap.sh   # clone 4 siblings + build .lgx + image (~30-45 min first run)
 cd docker/testnet/mix_e2e
@@ -34,8 +34,10 @@ docker compose down                        # tear down
 No SSH keys? Clone + bootstrap over HTTPS:
 
 ```sh
-git clone https://github.com/adklempner/logos-rln-mix-sim.git
-REPO_BASE=https://github.com/adklempner bash docker/testnet/mix_e2e/bootstrap.sh
+git clone https://github.com/logos-co/logos-rln-mix-sim.git
+REPO_BASE=https://github.com/adklempner \
+LOGOS_REPO_BASE=https://github.com/logos-co \
+bash docker/testnet/mix_e2e/bootstrap.sh
 ```
 
 The only runtime knob is the negative tests (both prove RLN gates delivery):
@@ -57,12 +59,13 @@ NEG=2 bash orchestrate.sh    # sender's key not allowlisted -> gifter refuses au
 
 ## What it builds on
 
-`bootstrap.sh` clones four sibling repos next to this one (adklempner forks, SSH by
-default) and links them into one loadable libp2p `.lgx`:
+`bootstrap.sh` clones four sibling repos next to this one (SSH by default; the mix
+stack sits on adklempner forks pending upstreaming) and links them into one loadable
+libp2p `.lgx`:
 
 | repo | branch | role |
 |---|---|---|
-| [`logos-rln-gifter`](https://github.com/adklempner/logos-rln-gifter) | `master` | RLN membership gifter protocol (LIP-158) |
+| [`logos-rln-gifter`](https://github.com/logos-co/logos-rln-gifter) | `master` | RLN membership gifter protocol (LIP-158) |
 | [`logos-libp2p-module`](https://github.com/adklempner/logos-libp2p-module) | `rebase/enable-mix` | universal libp2p module (mix + RLN + gifter glue) |
 | [`mix-rln-spam-protection-plugin`](https://github.com/adklempner/mix-rln-spam-protection-plugin) | `feat/cbind-rln` | RLN SpamProtection (LIP-144) |
 | [`nim-libp2p-mix`](https://github.com/adklempner/nim-libp2p-mix) | `rebase/mix-cbind` | Sphinx mix (LIP-99) |
