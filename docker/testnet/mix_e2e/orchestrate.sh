@@ -84,6 +84,10 @@ jval(){ python3 -c 'import json,sys
 try:
   d=json.load(sys.stdin); r=d.get("result"); print(r.get("value") if isinstance(r,dict) else r)
 except Exception: print("ERR")'; }
+parse_leaf_idc(){ python3 -c 'import json,sys
+try:
+  v=json.load(sys.stdin)["result"]["value"]; print("lopt=%s; idc=%s"%(v["leaf_index"],v["id_commitment"]))
+except Exception: print("lopt=ERR; idc=")'; }
 svc_ip(){ docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$($DC ps -q "$1")"; }
 chain_head(){ curl -s -m 15 -X POST "$RPC_URL" -H 'content-type: application/json' --data '{"jsonrpc":"2.0","method":"getLastBlockId","params":[],"id":1}' | python3 -c 'import json,sys;print(json.load(sys.stdin)["result"])'; }
 sync_wallet(){ local svc="$1" head cur n
@@ -246,10 +250,7 @@ except Exception: print("")')
     idc=""; lopt=""; reg=""
     for attempt in 1 2 3 4; do
       reg=$(jcall "$s" libp2p_module rlnRegister "{\"config\":\"$CONFIG_ACCT\",\"wallet\":\"$HOLDING_ACCT\",\"seed\":\"$seed\",\"rate\":$RATE}")
-      eval "$(echo "$reg" | python3 -c 'import json,sys
-try:
-  v=json.load(sys.stdin)["result"]["value"]; print("lopt=%s; idc=%s"%(v["leaf_index"],v["id_commitment"]))
-except Exception: print("lopt=ERR; idc=")')"
+      eval "$(echo "$reg" | parse_leaf_idc)"
       [ -n "$idc" ] && break
       echo "  $s rlnRegister attempt $attempt failed ($reg) — re-sync + retry in ${REG_RETRY_SLEEP}s" >&2
       sync_wallet "$s" >/dev/null 2>&1; sleep "$REG_RETRY_SLEEP"
@@ -284,10 +285,7 @@ except Exception: print("lopt=ERR; idc=")')"
     idc=""; lopt=""; req=""
     for attempt in 1 2 3 4; do
       req=$(jcall "$s" libp2p_module rlnGifterRequest "{\"gifterPeerId\":\"$(gv PEERID "$GIFTER")\",\"gifterMultiaddr\":\"$(gv MADDR "$GIFTER")\",\"config\":\"$CONFIG_ACCT\",\"seed\":\"$seed\",\"authKey\":\"$ak\",\"rate\":$RATE}")
-      eval "$(echo "$req" | python3 -c 'import json,sys
-try:
-  v=json.load(sys.stdin)["result"]["value"]; print("lopt=%s; idc=%s"%(v["leaf_index"],v["id_commitment"]))
-except Exception: print("lopt=ERR; idc=")')"
+      eval "$(echo "$req" | parse_leaf_idc)"
       [ -n "$idc" ] && break
       echo "  $s rlnGifterRequest attempt $attempt failed ($req) — re-sync gifter + retry in ${REG_RETRY_SLEEP}s" >&2
       sync_wallet "$GIFTER" >/dev/null 2>&1; sleep "$REG_RETRY_SLEEP"
@@ -366,12 +364,13 @@ if [ "$NEG" != "0" ]; then
     echo "  PASS (negative): sender got 0 replies and generated 0 proofs -> rejected (NEG=$NEG)."
   else
     echo "  FAIL (negative): expected 0 replies / 0 sender proofs, got replies=$SD sgen=$sgen"
+    echo "DONE (NEG=$NEG)"; exit 1
   fi
 else
   exp="sender->dest=$MSG_COUNT dest->sender=$MSG_COUNT"; ok=1
   [ "$SD" = "$MSG_COUNT" ] || ok=0
   [ "$DS" = "$MSG_COUNT" ] || ok=0
   if [ "$ok" = "1" ]; then echo "  PASS: every round-trip got a reply ($exp)."
-  else echo "  FAIL: expected $exp, got sender->dest=$SD dest->sender=$DS"; fi
+  else echo "  FAIL: expected $exp, got sender->dest=$SD dest->sender=$DS"; echo "DONE (NEG=$NEG)"; exit 1; fi
 fi
 echo "DONE (NEG=$NEG)"

@@ -34,9 +34,9 @@ clone(){ # repo branch
 }
 
 echo "=== 1/3 clone sibling repos into $SIBLINGS ==="
-clone logos-libp2p-module             feat/enable-mix
+clone logos-libp2p-module             rebase/enable-mix
 clone mix-rln-spam-protection-plugin  feat/cbind-rln
-clone nim-libp2p-mix                  feat/mix-cbind
+clone nim-libp2p-mix                  rebase/mix-cbind
 clone logos-rln-gifter                master
 
 echo "=== 2/3 build the Linux libp2p .lgx (~6-15 min) ==="

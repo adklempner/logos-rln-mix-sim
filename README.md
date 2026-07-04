@@ -67,12 +67,12 @@ default) and links them into one loadable libp2p `.lgx`:
 | repo | branch | role |
 |---|---|---|
 | [`logos-rln-gifter`](https://github.com/adklempner/logos-rln-gifter) | `master` | RLN membership gifter protocol (LIP-158) |
-| [`logos-libp2p-module`](https://github.com/adklempner/logos-libp2p-module) | `feat/enable-mix` | universal libp2p module (mix + RLN + gifter glue) |
+| [`logos-libp2p-module`](https://github.com/adklempner/logos-libp2p-module) | `rebase/enable-mix` | universal libp2p module (mix + RLN + gifter glue) |
 | [`mix-rln-spam-protection-plugin`](https://github.com/adklempner/mix-rln-spam-protection-plugin) | `feat/cbind-rln` | RLN SpamProtection (LIP-144) |
-| [`nim-libp2p-mix`](https://github.com/adklempner/nim-libp2p-mix) | `feat/mix-cbind` | Sphinx mix (LIP-99) |
+| [`nim-libp2p-mix`](https://github.com/adklempner/nim-libp2p-mix) | `rebase/mix-cbind` | Sphinx mix (LIP-99) |
 
-The image build additionally clones `logos-co/logos-lez-rln@feat/spel` — which carries
-the RLN patches in-branch and fetches the execution zone (lssa) at `v0.2.0-rc6` via its
+The image build additionally clones `logos-co/logos-lez-rln` (`main` pinned @
+`4b403c1`) — which fetches the execution zone (lssa) at `v0.2.0-rc6` via its
 flake — and bakes a **deployment profile** (RLN tree + wallet) into `/testnet`.
 
 ## Layout

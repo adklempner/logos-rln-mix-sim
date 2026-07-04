@@ -11,7 +11,7 @@ import sys
 # ---- base58 (btc alphabet) ----
 _B58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 
-def b58decode(s):
+def b58decode(s: str) -> bytes:
     n = 0
     for c in s:
         n = n * 58 + _B58.index(c)
@@ -22,14 +22,14 @@ def b58decode(s):
 # ---- RFC 7748 X25519 ----
 _P = 2 ** 255 - 19
 
-def _clamp(k):
+def _clamp(k: bytes) -> int:
     k = bytearray(k)
     k[0] &= 248
     k[31] &= 127
     k[31] |= 64
     return int.from_bytes(k, "little")
 
-def _x25519(scalar, u):
+def _x25519(scalar: int, u: int) -> int:
     x1 = u
     x2, z2, x3, z3 = 1, 0, u, 1
     swap = 0
@@ -58,12 +58,12 @@ def _x25519(scalar, u):
         z2, z3 = z3, z2
     return (x2 * pow(z2, _P - 2, _P)) % _P
 
-def mixpub(privhex):
+def mixpub(privhex: str) -> str:
     priv = bytes.fromhex(privhex)
     pub = _x25519(_clamp(priv), 9)
     return pub.to_bytes(32, "little").hex()
 
-def peerpub(peerid):
+def peerpub(peerid: str) -> str:
     raw = b58decode(peerid)
     # identity multihash: 0x00 <len> <PublicKey protobuf>
     assert raw[0] == 0x00, "peerId is not an identity multihash (key not inlined)"

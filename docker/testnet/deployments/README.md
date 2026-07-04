@@ -16,8 +16,8 @@ wallet**. See the canonical docs at `logos-lez-rln/tools/deployments/README.md`.
 
 The deployment layer lives once, in **`logos-lez-rln/tools/deployments/`**
 (`stage.sh` / `provision.sh` / `verify.sh` + the `derive_accounts` bin). This repo
-does **not** submodule logos-lez-rln — the image clones it (`@feat/spel`) at build
-time. The deployment tooling it consumes two ways:
+does **not** submodule logos-lez-rln — the image clones it (`main`, pinned by
+commit) at build time. The deployment tooling it consumes two ways:
 
 - `docker/testnet/stage.sh` — a **vendored copy** of the canonical `stage.sh` (bash+jq).
   It sits in the build context so `docker build` stays self-contained (the image has

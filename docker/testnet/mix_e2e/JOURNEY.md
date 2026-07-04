@@ -64,12 +64,12 @@ allocation is what makes growing a mix fleet practical.
   libp2p protocol module: a self-contained nim-libp2p `LPProtocol` implementing
   `/logos/rln/membership/1.0.0` (LIP-158) with EIP-191 allowlist auth, plus the
   client side. EIP-191 is used **only** for the client↔gifter handshake.
-- **`logos-libp2p-module`** (sibling, `feat/enable-mix`) — the universal Logos Core
+- **`logos-libp2p-module`** (sibling, `rebase/enable-mix`) — the universal Logos Core
   libp2p module; exposes every method the orchestrator calls (`rlnEnable`,
   `rlnGifterServe`/`rlnGifterRequest`, `rlnIsReady`, `mixSetNodeInfo`,
   `mixNodepoolAdd`, `mixRegisterDestReadBehavior`, `mixDialWithReply`,
   `streamWrite`/`streamReadExactly`).
-- **`nim-libp2p-mix`** (sibling, `feat/mix-cbind`) — LIBP2P-MIX (LIP-99): Sphinx
+- **`nim-libp2p-mix`** (sibling, `rebase/mix-cbind`) — LIBP2P-MIX (LIP-99): Sphinx
   packets, SURB replies, cover traffic, and the pluggable `SpamProtection`
   interface. Wire format `[Sphinx packet][σ]`: each hop strips the RLN proof σ,
   peels one Sphinx layer, appends a fresh σ.
@@ -78,11 +78,10 @@ allocation is what makes growing a mix fleet practical.
   Merkle depth 20), proofs bound to the packet bytes so they can't be replayed;
   nullifier log for double-signaling detection. Unchanged by the gifter work —
   only *how a node acquires its identity* changed.
-- **`logos-lez-rln`** (cloned inside the image, `feat/spel`) — the wallet + RLN
-  Logos Core modules as `.lgx` bundles; implements `register_member`, the
-  funder≠identity registration the gifter drives. Carries the RLN patches in-branch
-  and fetches the execution zone (lssa) at tag `v0.2.0-rc6` via its flake — nothing
-  is vendored.
+- **`logos-lez-rln`** (cloned inside the image, `main` pinned @ `4b403c1`) — the
+  wallet + RLN Logos Core modules as `.lgx` bundles; implements `register_member`,
+  the funder≠identity registration the gifter drives. Fetches the execution zone
+  (lssa) at tag `v0.2.0-rc6` via its flake — nothing is vendored.
 
 ### Repository
 
@@ -117,12 +116,12 @@ bash docker/testnet/mix_e2e/bootstrap.sh
 #    No SSH keys? The forks are public — clone + bootstrap over HTTPS:
 #      git clone https://github.com/adklempner/logos-rln-mix-sim.git
 #      REPO_BASE=https://github.com/adklempner bash docker/testnet/mix_e2e/bootstrap.sh
-#    (Manual equivalent: clone logos-libp2p-module@feat/enable-mix,
-#     mix-rln-spam-protection-plugin@feat/cbind-rln, nim-libp2p-mix@feat/mix-cbind,
+#    (Manual equivalent: clone logos-libp2p-module@rebase/enable-mix,
+#     mix-rln-spam-protection-plugin@feat/cbind-rln, nim-libp2p-mix@rebase/mix-cbind,
 #     logos-rln-gifter@master as siblings; LOGOS_ROOT="$(cd .. && pwd)" bash
 #     docker/build_lgx_linux.sh; docker build -f docker/Dockerfile.testnet-e2e
-#     -t lp2p-mix-e2e .  The image build clones logos-co/logos-lez-rln@feat/spel
-#     internally. Changed a source repo? Re-run only the .lgx build — the compose
+#     -t lp2p-mix-e2e .  The image build clones logos-co/logos-lez-rln (main,
+#     pinned by commit) internally. Changed a source repo? Re-run only the .lgx build — the compose
 #     entrypoint overlays it over the image's baked copy.)
 
 # 2. Run the full E2E (~15 min; the 5 sequential on-chain registrations dominate)
