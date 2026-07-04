@@ -49,6 +49,19 @@ NEG=2 bash orchestrate.sh    # sender's key not allowlisted -> gifter refuses au
 - `sender->dest: 3/3` and `dest->sender: 3/3` replies received; ~36 per-hop RLN
   verifications; `VERDICT: PASS`.
 
+## Trust model (LIP-158 trade-offs)
+
+The gifter is a **membership provider / gatekeeper**, with the trade-offs that role
+implies: it decides which commitments get registered and can refuse or stall any
+request (`NEG=2` demonstrates the refusal path); sybil resistance is exactly the
+auth policy and nothing more (here, the spec's demo mode — a static EIP-191
+allowlist, one membership per address); and it fronts the funds and learns a
+durable auth-identity↔commitment mapping — but never the RLN secret, so it cannot
+forge client proofs. Client-IP↔identity correlation is deferred by the spec to RLN
+Stealth Commitments. Spam enforcement itself is not provider-mediated: exceeding
+`userMessageLimit` per epoch reuses a nullifier, letting any relay reconstruct the
+offender's key and remove it from the group.
+
 ## What it builds on
 
 `bootstrap.sh` clones four sibling repos next to this one over HTTPS (the mix stack
