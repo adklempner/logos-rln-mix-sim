@@ -19,8 +19,9 @@ cheap, authenticated membership allocation matters.
 
 ## Quick start
 
-Requires Docker (~30 GB free in its VM), `git`, and internet. No local toolchain, no
-manual keystores — the bootstrap fetches and builds everything.
+Requires Docker running (~30 GB free in its VM), internet, and stock host tools
+(`bash`, `git`, `python3`, `curl`, `rsync` — preinstalled on macOS and most Linux).
+No toolchain, no manual keystores — the bootstrap fetches and builds everything.
 
 ```sh
 git clone git@github.com:logos-co/logos-rln-mix-sim.git
