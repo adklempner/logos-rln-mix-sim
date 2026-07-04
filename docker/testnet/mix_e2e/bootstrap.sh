@@ -2,7 +2,7 @@
 # One-shot bootstrap for the RLN-over-mix sim, runnable by any dev with only
 # Docker + git installed. Run it from a clone of logos-rln-mix-sim:
 #
-#   git clone git@github.com:logos-co/logos-rln-mix-sim.git
+#   git clone https://github.com/logos-co/logos-rln-mix-sim.git
 #   cd logos-rln-mix-sim
 #   bash docker/testnet/mix_e2e/bootstrap.sh
 #   cd docker/testnet/mix_e2e && bash orchestrate.sh
@@ -11,17 +11,15 @@
 # .lgx, and builds the base image tagged `lp2p-mix-e2e` (logoscore + wallet/rln
 # modules + the baked deployment profile — all fetched by the image build).
 #
-# Clones over SSH by default. All repos are public, so if you don't have SSH
-# keys set up, override with HTTPS:
-#   REPO_BASE=https://github.com/adklempner \
-#   LOGOS_REPO_BASE=https://github.com/logos-co \
-#   bash docker/testnet/mix_e2e/bootstrap.sh
+# All repos are public and clone anonymously over HTTPS — no keys or env vars
+# needed. Contributors who prefer SSH can override the clone bases:
+#   REPO_BASE=git@github.com:adklempner LOGOS_REPO_BASE=git@github.com:logos-co ...
 set -euo pipefail
 
 # The mix stack lives on adklempner forks pending upstreaming; the gifter is a
 # logos-co repo.
-FORK_BASE="${REPO_BASE:-git@github.com:adklempner}"
-LOGOS_BASE="${LOGOS_REPO_BASE:-git@github.com:logos-co}"
+FORK_BASE="${REPO_BASE:-https://github.com/adklempner}"
+LOGOS_BASE="${LOGOS_REPO_BASE:-https://github.com/logos-co}"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$HERE/../../.." && pwd)"          # logos-rln-mix-sim
 SIBLINGS="$(cd "$REPO_ROOT/.." && pwd)"            # parent dir = sibling root

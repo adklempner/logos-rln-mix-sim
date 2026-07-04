@@ -24,21 +24,12 @@ Requires Docker running (~30 GB free in its VM), internet, and stock host tools
 No toolchain, no manual keystores — the bootstrap fetches and builds everything.
 
 ```sh
-git clone git@github.com:logos-co/logos-rln-mix-sim.git
+git clone https://github.com/logos-co/logos-rln-mix-sim.git
 cd logos-rln-mix-sim
 bash docker/testnet/mix_e2e/bootstrap.sh   # clone 4 siblings + build .lgx + image (~30-45 min first run)
 cd docker/testnet/mix_e2e
 bash orchestrate.sh                        # gifted allocation + 3-hop RLN-over-mix delivery (~15 min)
 docker compose down                        # tear down
-```
-
-No SSH keys? Clone + bootstrap over HTTPS:
-
-```sh
-git clone https://github.com/logos-co/logos-rln-mix-sim.git
-REPO_BASE=https://github.com/adklempner \
-LOGOS_REPO_BASE=https://github.com/logos-co \
-bash docker/testnet/mix_e2e/bootstrap.sh
 ```
 
 The only runtime knob is the negative tests (both prove RLN gates delivery):
@@ -60,8 +51,8 @@ NEG=2 bash orchestrate.sh    # sender's key not allowlisted -> gifter refuses au
 
 ## What it builds on
 
-`bootstrap.sh` clones four sibling repos next to this one (SSH by default; the mix
-stack sits on adklempner forks pending upstreaming) and links them into one loadable
+`bootstrap.sh` clones four sibling repos next to this one over HTTPS (the mix stack
+sits on adklempner forks pending upstreaming) and links them into one loadable
 libp2p `.lgx`:
 
 | repo | branch | role |
