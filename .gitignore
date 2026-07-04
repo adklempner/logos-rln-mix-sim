@@ -1,0 +1,10 @@
+# Built libp2p .lgx (produced by docker/build_lgx_linux.sh)
+docker/lp2p-out/
+
+# nix build outputs
+result
+result-*
+
+# local scratch
+*.log
+*.exe
