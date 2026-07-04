@@ -142,7 +142,7 @@ EOF
     cat >&2 <<EOF
   CAUSE: unknown. Inspect the node log:
     docker compose -f docker-compose.yml logs $svc | grep -iE 'register|balance|rate limit|payment|tree'
-  Most common is out-of-funds -> re-run run_setup (see JOURNEY.md, "When something fails").
+  Most common is out-of-funds -> re-run run_setup (docker/testnet/deployments/README.md).
 EOF
   fi
 }

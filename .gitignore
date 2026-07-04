@@ -8,3 +8,6 @@ result-*
 # local scratch
 *.log
 *.exe
+
+# local working doc (kept untracked)
+docker/testnet/mix_e2e/JOURNEY.md

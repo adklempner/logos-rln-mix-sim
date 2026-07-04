@@ -55,10 +55,6 @@ NEG=2 bash orchestrate.sh    # sender's key not allowlisted -> gifter refuses au
 - `sender->dest: 3/3` and `dest->sender: 3/3` replies received; ~36 per-hop RLN
   verifications; `VERDICT: PASS`.
 
-**[`docker/testnet/mix_e2e/JOURNEY.md`](docker/testnet/mix_e2e/JOURNEY.md) is the full
-doc** — requirements, an annotated sample run, the failure playbook, the step-by-step
-orchestration walkthrough, and the allocation service's benefits and trade-offs.
-
 ## What it builds on
 
 `bootstrap.sh` clones four sibling repos next to this one (adklempner forks, SSH by
@@ -92,13 +88,9 @@ docker/
       docker-compose.yml     #   5 logoscore services on a shared bridge network
       entrypoint.sh, keys.py #   per-container setup + host-side key derivation
       fixtures/gifter_auth/  #   demo EIP-191 keys + allowlist (NOT for production)
-      JOURNEY.md             #   THE DOC: requirements, sample run, failures, walkthrough, trade-offs
 ```
 
 ## Docs
 
-- **[`docker/testnet/mix_e2e/JOURNEY.md`](docker/testnet/mix_e2e/JOURNEY.md)** — everything:
-  requirements, running it, reading the output, the failure playbook, what each step
-  orchestrates, and the LIP-158/LIP-144 benefits and trade-offs.
 - [`docker/testnet/deployments/README.md`](docker/testnet/deployments/README.md) — deployment
   profiles (run-against-existing / redeploy-fresh, `provision.sh`/`verify.sh`).
